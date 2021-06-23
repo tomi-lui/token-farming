@@ -1,0 +1,233 @@
+{
+  "contractName": "TokenFarm",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/tomil/Documents/GitHub/token-farming/contracts/TokenFarm.sol\":\"TokenFarm\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/tomil/Documents/GitHub/token-farming/contracts/TokenFarm.sol\":{\"keccak256\":\"0xe09572428edced8f13d005b5ed3b5342a54ed06d029afaca34cdf16f4b25160d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d9dd141feaf1bd549431d05543659a343525b3d1c641103fcdf3a56dc42b1a46\",\"dweb:/ipfs/QmXvmYfw6LSjCfdJFvpZPx4haBTHzHe2VVFDAfKhs3Ljfw\"]}},\"version\":1}",
+  "bytecode": "0x60806040526040518060400160405280600f81526020017f46696a6920546f6b656e204661726d00000000000000000000000000000000008152506000908051906020019061004f929190610062565b5034801561005c57600080fd5b5061010d565b828054600181600116156101000203166002900490600052602060002090601f01602090048101928261009857600085556100df565b82601f106100b157805160ff19168380011785556100df565b828001600101855582156100df579182015b828111156100de5782518255916020019190600101906100c3565b5b5090506100ec91906100f0565b5090565b5b808211156101095760008160009055506001016100f1565b5090565b6101878061011c6000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c806306fdde0314610030575b600080fd5b6100386100b3565b6040518080602001828103825283818151815260200191508051906020019080838360005b8381101561007857808201518184015260208101905061005d565b50505050905090810190601f1680156100a55780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60008054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156101495780601f1061011e57610100808354040283529160200191610149565b820191906000526020600020905b81548152906001019060200180831161012c57829003601f168201915b50505050508156fea264697066735822122006487d37a0035851c53201e9949b9216f2a0f27e42213dc6fb0986a45a5320e064736f6c63430007060033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c806306fdde0314610030575b600080fd5b6100386100b3565b6040518080602001828103825283818151815260200191508051906020019080838360005b8381101561007857808201518184015260208101905061005d565b50505050905090810190601f1680156100a55780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60008054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156101495780601f1061011e57610100808354040283529160200191610149565b820191906000526020600020905b81548152906001019060200180831161012c57829003601f168201915b50505050508156fea264697066735822122006487d37a0035851c53201e9949b9216f2a0f27e42213dc6fb0986a45a5320e064736f6c63430007060033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "60:68:3:-:0;;;86:38;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;60:68;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;",
+  "deployedSourceMap": "60:68:3:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;86:38;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity >0.7.4;\r\n\r\ncontract TokenFarm {\r\n    string public name = \"Fiji Token Farm\";\r\n}",
+  "sourcePath": "C:/Users/tomil/Documents/GitHub/token-farming/contracts/TokenFarm.sol",
+  "ast": {
+    "absolutePath": "/C/Users/tomil/Documents/GitHub/token-farming/contracts/TokenFarm.sol",
+    "exportedSymbols": {
+      "TokenFarm": [
+        400
+      ]
+    },
+    "id": 401,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 396,
+        "literals": [
+          "solidity",
+          ">",
+          "0.7",
+          ".4"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:3"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 400,
+        "linearizedBaseContracts": [
+          400
+        ],
+        "name": "TokenFarm",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "functionSelector": "06fdde03",
+            "id": 399,
+            "mutability": "mutable",
+            "name": "name",
+            "nodeType": "VariableDeclaration",
+            "scope": 400,
+            "src": "86:38:3",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 397,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "86:6:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "value": {
+              "hexValue": "46696a6920546f6b656e204661726d",
+              "id": 398,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "string",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "107:17:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_stringliteral_53f4d467fbe7dab93aa23678da0f09f89ab6a12032fa17d5186e4bab0bc4fc51",
+                "typeString": "literal_string \"Fiji Token Farm\""
+              },
+              "value": "Fiji Token Farm"
+            },
+            "visibility": "public"
+          }
+        ],
+        "scope": 401,
+        "src": "60:68:3"
+      }
+    ],
+    "src": "33:95:3"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "/C/Users/tomil/Documents/GitHub/token-farming/contracts/TokenFarm.sol",
+      "exportedSymbols": {
+        "TokenFarm": [
+          400
+        ]
+      },
+      "license": "MIT"
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            ">",
+            "0.7",
+            ".4"
+          ]
+        },
+        "id": 396,
+        "name": "PragmaDirective",
+        "src": "33:23:3"
+      },
+      {
+        "attributes": {
+          "abstract": false,
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            400
+          ],
+          "name": "TokenFarm",
+          "scope": 401
+        },
+        "children": [
+          {
+            "attributes": {
+              "constant": false,
+              "functionSelector": "06fdde03",
+              "mutability": "mutable",
+              "name": "name",
+              "scope": 400,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "string",
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "string",
+                  "type": "string"
+                },
+                "id": 397,
+                "name": "ElementaryTypeName",
+                "src": "86:6:3"
+              },
+              {
+                "attributes": {
+                  "hexvalue": "46696a6920546f6b656e204661726d",
+                  "isConstant": false,
+                  "isLValue": false,
+                  "isPure": true,
+                  "lValueRequested": false,
+                  "token": "string",
+                  "type": "literal_string \"Fiji Token Farm\"",
+                  "value": "Fiji Token Farm"
+                },
+                "id": 398,
+                "name": "Literal",
+                "src": "107:17:3"
+              }
+            ],
+            "id": 399,
+            "name": "VariableDeclaration",
+            "src": "86:38:3"
+          }
+        ],
+        "id": 400,
+        "name": "ContractDefinition",
+        "src": "60:68:3"
+      }
+    ],
+    "id": 401,
+    "name": "SourceUnit",
+    "src": "33:95:3"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.7.6+commit.7338295f.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0x3D4896bF96b208B6b69a2cfC9641F8907E2E7eAa",
+      "transactionHash": "0x949d12cb1ea1b88293efd604ba791e75e6229ac937519ae0141662d63917fa5d"
+    }
+  },
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-06-23T00:24:35.013Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
