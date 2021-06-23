@@ -1,0 +1,15 @@
+
+re-deploy:
+truffle compile
+truffle migrate --reset
+
+get dai token contract:
+dai = await DaiToken.deployed()
+
+get accounts:
+accounts = await web3.eth.getAccounts()
+
+get balance of account 1 for Dai:
+balance = await dai.balanceOf(accounts[1])
+balance.toString()
+formattedBalance = web3.utils.fromWei(balance)
