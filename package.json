@@ -21,6 +21,7 @@
   "homepage": "https://github.com/6momo1/token-farming#readme",
   "dependencies": {
     "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "mocha": "^9.0.1"
   }
 }

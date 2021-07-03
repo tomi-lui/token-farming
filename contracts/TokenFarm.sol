@@ -6,13 +6,18 @@ import "./DaiToken.sol";
 
 
 contract TokenFarm {
-    string public name = "Fiji Token Farm";
+    string public name = "Token Farm";
 
     DaiToken public daiToken;
     FijiToken public fijiToken;
 
-    constructor(FijiToken _fijiToken, DaiToken _daiToken ) {
-        daiToken = _daiToken;
-        fijiToken = _fijiToken;
-    }
+    // constructor(FijiToken _fijiToken, DaiToken _daiToken ) {
+    //     daiToken = _daiToken;
+    //     fijiToken = _fijiToken;
+    // }
+
+    // constructor () public {
+        
+    // }
+
 }
