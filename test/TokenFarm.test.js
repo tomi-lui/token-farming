@@ -67,4 +67,24 @@ contract('TokenFarm', ([owner, investor]) => {
 
     })
 
+
+    describe('Token Farming', async () => {
+        it('rewards investors for staking Dai Tokens', async () => {
+
+            // Check investor balance before staking
+            result = await daiToken.balanceOf(investor)
+
+            // confirm investor has DAI tokens.
+            assert.equal(result.toString(), toWei('100'), 'Investor Mock DAI wallet balance correct before staking')
+            
+            // Stake DAI Tokens
+            // await daiToken.approve(tokenFarm.address, toWei('100'), { from: investor })
+            await tokenFarm.stakeTokens(toWei('100'), { from: investor })
+
+            // Assert investor has successfully staked tokens
+            // hasStaked = tokenFarm.
+            // isStaking
+            // stakingBalance
+        })
+    })
 })
