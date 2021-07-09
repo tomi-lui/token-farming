@@ -1,90 +1,76 @@
-const { assert } = require('chai')
-var chai = require('chai')
-var chaiAsPromised = require('chai-as-promised')
-chai.use(chaiAsPromised)
-chai.should()
-
 const DaiToken = artifacts.require('DaiToken')
 const FijiToken = artifacts.require('FijiToken')
 const TokenFarm = artifacts.require('TokenFarm')
 
+require('chai')
+  .use(require('chai-as-promised'))
+  .should()
 
-function toWei(n) {
-    return web3.utils.toWei(n, 'ether')
+function tokens(n) {
+  return web3.utils.toWei(n, 'ether');
 }
 
-
 contract('TokenFarm', ([owner, investor]) => {
+  let daiToken, fijiToken, tokenFarm
 
-    // initialize variables
-    let daiToken, fijiToken, tokenFarm
+  before(async () => {
+    // Load Contracts
+    daiToken = await DaiToken.new()
+    fijiToken = await FijiToken.new()
+    tokenFarm = await TokenFarm.new(fijiToken.address, daiToken.address)
 
-    // before running tests
-    before(async() => {
-        daiToken = await DaiToken.new()
-        fijiToken = await FijiToken.new()
-        tokenFarm = await TokenFarm.new(fijiToken.address, daiToken.address)
+    // Transfer all Dapp tokens to farm (1 million)
+    await fijiToken.transfer(tokenFarm.address, tokens('1000000'))
 
-        // transfer all Fiji tokens to farm (1 million)
-        await fijiToken.transfer(tokenFarm.address, toWei('1000000'))
+    // Send tokens to investor
+    await daiToken.transfer(investor, tokens('100'), { from: owner })
+  })
 
-        // Send mock dai tokens to investor to prototype
-        // { from: owner } specifies who is calling this function
-        await daiToken.transfer(investor, toWei('100'), { from: owner } )
+  describe('Mock DAI deployment', async () => {
+    it('has a name', async () => {
+      const name = await daiToken.name()
+      assert.equal(name, 'Mock DAI Token')
+    })
+  })
 
+  describe('Fiji Token deployment', async () => {
+    it('has a name', async () => {
+      const name = await fijiToken.name()
+      assert.equal(name, 'Fiji Token')
+    })
+  })
+
+  describe('Token Farm deployment', async () => {
+    it('has a name', async () => {
+      const name = await tokenFarm.name()
+      assert.equal(name, 'Token Farm')
     })
 
-    // test contract name
-    describe('Dai Token Deployment', async() => {
-        it('Has a name', async ()=> {
-            const name = await daiToken.name()
-            console.log(name)
-            assert.equal(name, 'Mock DAI Token')
-        })
+    it('contract has tokens', async () => {
+      let balance = await fijiToken.balanceOf(tokenFarm.address)
+      assert.equal(balance.toString(), tokens('1000000'))
     })
+  })
 
-    describe('Fiji Token Deployment', async() => {
-        it('Has a name', async ()=> {
-            const name = await fijiToken.name()
-            console.log(name)
-            assert.equal(name, 'Fiji Token')
-        })
-    })
+  describe('Farming tokens', async () => {
 
-    describe('Token Farm Deployment', async() => {
-        it('Has a name', async ()=> {
-            const name = await tokenFarm.name()
-            console.log(name)
-            assert.equal(name, 'Token Farm')
-        })
-
-        // test investors balance of DAI holdings
-        it('contract has tokens', async () => {
-            let balance = await fijiToken.balanceOf(tokenFarm.address)
-            assert.equal(balance.toString(), toWei('1000000'))
-        })
-
-
-    })
-
-
-    describe('Token Farming', async () => {
-        it('rewards investors for staking Dai Tokens', async () => {
+    it('rewards investors for staking mDai tokens', async () => {
+            let result
+            
+            result = await daiToken.balanceOf(owner)
+            console.log("owner balance:")
+            console.log(result.toString())
+            console.log(result.address)
+            
 
             // Check investor balance before staking
             result = await daiToken.balanceOf(investor)
+            assert.equal(result.toString(), tokens('100'), 'investor Mock DAI wallet balance correct before staking')
 
-            // confirm investor has DAI tokens.
-            assert.equal(result.toString(), toWei('100'), 'Investor Mock DAI wallet balance correct before staking')
-            
-            // Stake DAI Tokens
-            // await daiToken.approve(tokenFarm.address, toWei('100'), { from: investor })
-            await tokenFarm.stakeTokens(toWei('100'), { from: investor })
+            // Stake Mock DAI Tokens
+            await daiToken.approve(tokenFarm.address, tokens('100'), { from: investor })
+            await tokenFarm.stakeTokens(tokens('100'), { from: investor })
 
-            // Assert investor has successfully staked tokens
-            // hasStaked = tokenFarm.
-            // isStaking
-            // stakingBalance
         })
     })
 })

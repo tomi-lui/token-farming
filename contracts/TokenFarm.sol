@@ -8,6 +8,7 @@ import "./DaiToken.sol";
 contract TokenFarm {
     string public name = "Token Farm";
 
+    address public owner;
     DaiToken public daiToken;
     FijiToken public fijiToken;
 
@@ -17,22 +18,22 @@ contract TokenFarm {
     mapping(address => uint) public stakingBalance;
 
 
-    // constructor(FijiToken _fijiToken, DaiToken _daiToken ) {
-    //     daiToken = _daiToken;
-    //     fijiToken = _fijiToken;
-    // }
-
-    // constructor () public {
-        
-    // }
+    constructor(FijiToken _fijiToken, DaiToken _daiToken) {
+        fijiToken = _fijiToken;
+        daiToken = _daiToken;
+        owner = msg.sender;
+    }
 
     // 1. Stake tokens (Deposit)
     function stakeTokens(uint _amount) public {
-        
+
+        // require amount greater than 0
+        require(_amount > 0, "amount cannot be 0");
+
         // transfer dai tokens to this contract for staking
         daiToken.transferFrom(msg.sender, address(this), _amount);
 
-        // update taking balance
+        // update staking balance
         stakingBalance[msg.sender] = stakingBalance[msg.sender] + _amount;
 
         // add user to stakers array if they have not staked already
@@ -42,8 +43,6 @@ contract TokenFarm {
 
         // update staking status
         hasStaked[msg.sender] = true;
-
-        // update is staking
         isStaking[msg.sender] = true;
     }
 
