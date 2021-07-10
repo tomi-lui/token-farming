@@ -47,6 +47,40 @@ contract TokenFarm {
     }
 
     // 2. Unstaking Tokens (Withdraw)
+    function unstakeTokens() public {
+        uint balance = stakingBalance[msg.sender];
+
+        require(balance > 0, "staking balance cannot be 0" );
+
+        isStaking[msg.sender] = false;
+        stakingBalance[msg.sender] = 0;
+        
+        daiToken.transfer(msg.sender, balance);
+
+
+
+
+    }
+
+
 
     // 3. Issuing Tokens 
+    function issueTokens() public {
+
+        require(msg.sender == owner);
+
+        for (uint i = 0; i < stakers.length; i ++ ) {
+            address recipient = stakers[i];
+            uint balance = stakingBalance[recipient];
+
+            // check if balance is not 0 before transfering money
+            if (balance > 0) {
+                // a 1:1 ratio fijiToken reward 
+                fijiToken.transfer(recipient, balance);
+            }
+
+        }
+    }
+
+
 }
