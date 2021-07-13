@@ -3,6 +3,8 @@ import Navbar from './Navbar'
 import './App.css'
 import { useState } from 'react'
 import Web3 from 'web3'
+import DaiToken from '../abis/DaiToken.json'
+import FijiToken from '../abis/FijiToken.json'
 
 
 
@@ -26,16 +28,74 @@ function App() {
     // useEffect
     useEffect( () => {
       loadWeb3()
-      
-    })
+      loadBlockChainData()
+    }, [])
 
-
+    // state variables
     const [account, setAccount] = useState('0x0')
+    const [daiTokenBalance, setDaiTokenBalance] = useState('0')
+    const [daiToken, setDaiToken] = useState({})
+    const [fijiToken, setFijiToken] = useState({})
+    const [fijiTokenBalance, setFijiTokenBalance] = useState('0')
+
+
+
 
     async function loadBlockChainData() {
+
+        // connect to web3      
         const web3 = window.web3
+
+        // get current account
         const accounts = await web3.eth.getAccounts()
         setAccount(accounts[0])
+        console.log(accounts);
+
+        // get network id
+        const networkId = await web3.eth.net.getId()
+
+        // to create the javascript smart contract, we need the abi and the contract itself
+
+
+        // get daiToken network data
+        const daiTokenData = DaiToken.networks[networkId]
+        if (daiTokenData) { // if contract detected
+
+          // create a daiToken contract
+          const daiToken = new web3.eth.Contract(DaiToken.abi, daiTokenData.address)
+
+          setDaiToken(daiToken)
+          
+          // get daiToken balance of current user
+          let daiBalance = await daiToken.methods.balanceOf(account).call()
+          setDaiTokenBalance(daiBalance)
+
+          console.log("balance: ", daiBalance);
+
+        } else {
+          alert('DaiToken contract not deployed to detected network')
+        }
+
+
+        // get FijiToken network data
+        const fijiTokenData = FijiToken.networks[networkId]
+        if (fijiTokenData) { // if contract detected
+
+          // create a FijiToken contract
+          const fijiToken = new web3.eth.Contract(FijiToken.abi, fijiTokenData.address)
+
+          setFijiToken(fijiToken)
+          
+          // get fijiToken balance of current user
+          let daiBalance = await fijiToken.methods.balanceOf(account).call()
+          setFijiTokenBalance(daiBalance)
+
+          console.log("balance: ", daiBalance);
+
+        } else {
+          alert('FijiToken contract not deployed to detected network')
+        }
+
     }
 
     return (
