@@ -1,8 +1,8 @@
-import React, { Component, useEffect } from 'react'
-import Navbar from './Navbar'
-import './App.css'
-import { useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import Web3 from 'web3'
+import Navbar from './Navbar'
+import Main from './Main'
+import './App.css'
 import DaiToken from '../abis/DaiToken.json'
 import FijiToken from '../abis/FijiToken.json'
 import TokenFarm from '../abis/TokenFarm.json'
@@ -52,7 +52,7 @@ function App() {
         // get current account
         const accounts = await web3.eth.getAccounts()
         setAccount(accounts[0])
-        console.log(accounts);
+        console.log(account);
 
         // get network id
         const networkId = await web3.eth.net.getId()
@@ -63,16 +63,18 @@ function App() {
         const daiTokenData = DaiToken.networks[networkId]
         if (daiTokenData) { // if contract detected
 
-          // create a daiToken contract
+          // create and set daiToken contract
           const daiToken = new web3.eth.Contract(DaiToken.abi, daiTokenData.address)
-
           setDaiToken(daiToken)
           
-          // get daiToken balance of current user
-          let daiBalance = await daiToken.methods.balanceOf(account).call()
-          setDaiTokenBalance(daiBalance)
+          // get and set daiToken balance of current user
+          let daiBalance = "0" ;
+          if (account != "0x0") {
+            daiBalance = await daiToken.methods.balanceOf(account).call()
+          }
 
-          console.log("balance: ", daiBalance);
+          setDaiTokenBalance(daiBalance.toString())
+
 
         } else {
           alert('DaiToken contract not deployed to detected network')
@@ -88,8 +90,13 @@ function App() {
           setFijiToken(fijiToken)
           
           // get fijiToken balance of current user
-          let daiBalance = await fijiToken.methods.balanceOf(account).call()
-          setFijiTokenBalance(daiBalance)
+          try {
+            let fijiBalance = await fijiToken.methods.balanceOf(account).call()
+            setFijiTokenBalance(fijiBalance.toString())
+
+          } catch (error) {
+            console.log(error);
+          }
 
         } else {
           alert('FijiToken contract not deployed to detected network')
@@ -105,15 +112,22 @@ function App() {
           const tokenFarm = new web3.eth.Contract(TokenFarm.abi, tokenFarmData.address)
           setTokenFarm(tokenFarm)
 
-          // get staking balance
-          let stakingBalance = await tokenFarm.methods.stakingBalance(account).call()
-          setStakingBalance(stakingBalance)
+          try {
+            // get staking balance
+            let stakingBalance = await tokenFarm.methods.stakingBalance(account).call()
+            setStakingBalance(stakingBalance.toString())
+          } catch (error) {
+            console.log(error)
+          }
 
         } else {
           alert('tokenFarm contract not deployed to detected network')
         }
 
 
+        console.log("DAI balance: ", daiTokenBalance);
+        console.log("fiji balance: ", fijiTokenBalance);
+        console.log("staking balance: ", stakingBalance);
         setLoading(false)
     }
 
@@ -132,6 +146,9 @@ function App() {
                 </a>
 
                 <h1>Hello, World!</h1>
+                <Main balances={[daiTokenBalance, fijiTokenBalance, stakingBalance]}>
+
+                </Main>
 
               </div>
             </main>
