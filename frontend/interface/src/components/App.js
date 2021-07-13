@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Web3 from 'web3'
 import DaiToken from '../abis/DaiToken.json'
 import FijiToken from '../abis/FijiToken.json'
-
+import TokenFarm from '../abis/TokenFarm.json'
 
 
 // load web3
@@ -32,11 +32,14 @@ function App() {
     }, [])
 
     // state variables
+    const [loading, setLoading] = useState(true)
     const [account, setAccount] = useState('0x0')
-    const [daiTokenBalance, setDaiTokenBalance] = useState('0')
     const [daiToken, setDaiToken] = useState({})
     const [fijiToken, setFijiToken] = useState({})
+    const [tokenFarm, setTokenFarm] = useState({})
     const [fijiTokenBalance, setFijiTokenBalance] = useState('0')
+    const [daiTokenBalance, setDaiTokenBalance] = useState('0')
+    const [stakingBalance, setStakingBalance] = useState('0')
 
 
 
@@ -55,7 +58,6 @@ function App() {
         const networkId = await web3.eth.net.getId()
 
         // to create the javascript smart contract, we need the abi and the contract itself
-
 
         // get daiToken network data
         const daiTokenData = DaiToken.networks[networkId]
@@ -83,19 +85,36 @@ function App() {
 
           // create a FijiToken contract
           const fijiToken = new web3.eth.Contract(FijiToken.abi, fijiTokenData.address)
-
           setFijiToken(fijiToken)
           
           // get fijiToken balance of current user
           let daiBalance = await fijiToken.methods.balanceOf(account).call()
           setFijiTokenBalance(daiBalance)
 
-          console.log("balance: ", daiBalance);
-
         } else {
           alert('FijiToken contract not deployed to detected network')
         }
 
+
+
+        // get TokenFarm network data
+        const tokenFarmData = TokenFarm.networks[networkId]
+        if (tokenFarmData) { // if contract detected
+
+          // create a TokenFarm contract
+          const tokenFarm = new web3.eth.Contract(TokenFarm.abi, tokenFarmData.address)
+          setTokenFarm(tokenFarm)
+
+          // get staking balance
+          let stakingBalance = await tokenFarm.methods.stakingBalance(account).call()
+          setStakingBalance(stakingBalance)
+
+        } else {
+          alert('tokenFarm contract not deployed to detected network')
+        }
+
+
+        setLoading(false)
     }
 
     return (
