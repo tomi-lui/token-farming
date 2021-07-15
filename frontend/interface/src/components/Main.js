@@ -1,17 +1,24 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import img_dai from '../dai.png'
 
-const Main = ({balances}) => {
+const Main = ({balances, stakeTokens}) => {
 
     // states
     const [input, setInput] = useState("")
+    // refs
+    const inputRef = useRef()
 
-
-    console.log(balances);
+    const handleSubmit = event => {
+        event.preventDefault();
+        let amount = window.web3.utils.toWei(input, 'Ether') 
+        stakeTokens(amount)
+    }
 
     return (
         <div id="content" className="mt-3">
+
+            {/* table */}
             <table className="table table-borderless tet-muted text-center">
                 <thead>
                     <tr>
@@ -21,29 +28,33 @@ const Main = ({balances}) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{balances[2]} DAI</td>
-                        <td>{balances[1]} FIJI</td>
+                        <td>{window.web3.utils.fromWei(balances[2], 'ether')} DAI</td>
+                        <td>{window.web3.utils.fromWei(balances[1], 'ether')} FIJI</td>
                     </tr>
                 </tbody>
             </table>
 
 
             {/* form  */}
-
-            <div className="card mb-4">
-                <form className="mb-3">
+            <div className="card mb-4 p-3">
+                <form 
+                    className="mb-3"
+                    onSubmit={handleSubmit}
+                >
                     <div>
                         <label className="float-start"><b>Stake Tokens</b></label>
                         <span className="float-end text-muted">
-                            Balance: {balances[0]}
+                            Balance: {window.web3.utils.fromWei(balances[0], 'ether')}
+                            {/* Balance: {balances[0]} */}
                         </span>
                     </div>
 
                     <div className="input-group mb-4">
                         {/* textbox */}
                         <input
+                            ref={inputRef}
+                            onChange={event => setInput(event.target.value)}
                             type="text"
-                            ref={(input) => { setInput(input) }}
                             className="form-control form-control-lg"
                             placeholder="0"
                             required

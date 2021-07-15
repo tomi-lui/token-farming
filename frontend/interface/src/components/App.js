@@ -23,6 +23,7 @@ async function loadWeb3() {
 }
 
 
+
 function App() {
 
     // useEffect
@@ -37,72 +38,80 @@ function App() {
     const [daiToken, setDaiToken] = useState({})
     const [fijiToken, setFijiToken] = useState({})
     const [tokenFarm, setTokenFarm] = useState({})
-    const [fijiTokenBalance, setFijiTokenBalance] = useState('0')
-    const [daiTokenBalance, setDaiTokenBalance] = useState('0')
-    const [stakingBalance, setStakingBalance] = useState('0')
+    const [fijiTokenBalance, setFijiTokenBalance] = useState('')
+    const [daiTokenBalance, setDaiTokenBalance] = useState('')
+    const [stakingBalance, setStakingBalance] = useState('')
+    const [networkId, setNetworkId] = useState()
 
+    // print variables for testing
+    function printVars(){
+        console.log("current account:", account);
+        console.log("network id", networkId);
+        console.log("DAI balance: ", daiTokenBalance);
+        console.log("fiji balance: ", fijiTokenBalance);
+        console.log("staking balance: ", stakingBalance);
+    }
 
-
+    // allow users to stake tokens
+    async function stakeTokens(amount) {
+      console.log("staking ", amount, "DAI tokens");
+      console.log(tokenFarm._address);
+      console.log("typeof amount:", typeof(amount));
+      setLoading(true)
+      // first approve the transaction
+      daiToken.methods.approve(tokenFarm._address, amount)
+      .send({ from: account })
+      .on('transactionHash', (hash) => {
+        tokenFarm.methods.stakeTokens(amount)
+        .send({ from: account })
+        .on('transactionHash', (hash) => {
+          console.log(hash);
+        })
+      })
+      setLoading(false)
+      console.log("take tokens finished");
+      loadBlockChainData()
+      
+    }
 
     async function loadBlockChainData() {
+        /*
+        this function creates javascript contracts for 
+        the fijiToken, DaiToken and tokenFarm.
+        Then calls to retrieve user data
+        */
+
 
         // connect to web3      
         const web3 = window.web3
 
-        // get current account
+        // loop to wait for connection
+        while (!web3.eth.net.isListening()) {
+          console.log("trying to connecting");
+        }
+        console.log("web3 is listening");
+
+        // get current account    
         const accounts = await web3.eth.getAccounts()
         setAccount(accounts[0])
-        console.log(account);
 
         // get network id
-        const networkId = await web3.eth.net.getId()
+        let networkId = await web3.eth.net.getId()
+        setNetworkId(networkId)
 
         // to create the javascript smart contract, we need the abi and the contract itself
 
-        // get daiToken network data
-        const daiTokenData = DaiToken.networks[networkId]
-        if (daiTokenData) { // if contract detected
 
-          // create and set daiToken contract
-          const daiToken = new web3.eth.Contract(DaiToken.abi, daiTokenData.address)
-          setDaiToken(daiToken)
-          
-          // get and set daiToken balance of current user
-          let daiBalance = "0" ;
-          if (account != "0x0") {
-            daiBalance = await daiToken.methods.balanceOf(account).call()
-          }
+        loadDaiData()
+        loadFijiData()
+        loadFarmData()
+        printVars()
+        setLoading(false)
+    }
 
-          setDaiTokenBalance(daiBalance.toString())
-
-
-        } else {
-          alert('DaiToken contract not deployed to detected network')
-        }
-
-
-        // get FijiToken network data
-        const fijiTokenData = FijiToken.networks[networkId]
-        if (fijiTokenData) { // if contract detected
-
-          // create a FijiToken contract
-          const fijiToken = new web3.eth.Contract(FijiToken.abi, fijiTokenData.address)
-          setFijiToken(fijiToken)
-          
-          // get fijiToken balance of current user
-          try {
-            let fijiBalance = await fijiToken.methods.balanceOf(account).call()
-            setFijiTokenBalance(fijiBalance.toString())
-
-          } catch (error) {
-            console.log(error);
-          }
-
-        } else {
-          alert('FijiToken contract not deployed to detected network')
-        }
-
-
+    async function loadFarmData() {
+        
+      const web3 = window.web3
 
         // get TokenFarm network data
         const tokenFarmData = TokenFarm.networks[networkId]
@@ -121,14 +130,59 @@ function App() {
           }
 
         } else {
-          alert('tokenFarm contract not deployed to detected network')
+          console.log('tokenFarm contract not deployed to detected network')
         }
+    }
 
+    async function loadFijiData() {
 
-        console.log("DAI balance: ", daiTokenBalance);
-        console.log("fiji balance: ", fijiTokenBalance);
-        console.log("staking balance: ", stakingBalance);
-        setLoading(false)
+        const web3 = window.web3
+        
+        // get FijiToken network data
+        const fijiTokenData = FijiToken.networks[networkId]
+        if (fijiTokenData) { // if contract detected
+
+          // create a FijiToken contract
+          const fijiToken = new web3.eth.Contract(FijiToken.abi, fijiTokenData.address)
+          setFijiToken(fijiToken)
+          
+          // get fijiToken balance of current user
+          try {
+            let fijiBalance = await fijiToken.methods.balanceOf(account).call()
+            setFijiTokenBalance(fijiBalance.toString())
+
+          } catch (error) {
+            console.log(error);
+          }
+
+        } else {
+          console.log('FijiToken contract not deployed to detected network')
+        }
+    }
+
+    async function loadDaiData() {
+
+        const web3 = window.web3
+
+        // get daiToken contract, and network data
+        const daiTokenData = DaiToken.networks[networkId]
+        if (daiTokenData) { // if contract detected
+
+          // create and set daiToken contract
+          const daiToken = new web3.eth.Contract(DaiToken.abi, daiTokenData.address)
+          setDaiToken(daiToken)
+          
+          // get and set daiToken balance of current user
+          let daiBalance = "0" ;
+          if (account !== "0x0") {
+            daiBalance = await daiToken.methods.balanceOf(account).call()
+            console.log("daiBalance",daiBalance);
+          }
+          setDaiTokenBalance(daiBalance.toString())
+
+        } else { // if contract not detected
+            console.log('DaiToken contract not deployed to detected network')
+        }
     }
 
     return (
@@ -145,10 +199,15 @@ function App() {
                 >
                 </a>
 
-                <h1>Hello, World!</h1>
-                <Main balances={[daiTokenBalance, fijiTokenBalance, stakingBalance]}>
+                <h1>Hello, World!</h1>/
+                {!loading 
+                ? <Main 
+                  balances={[daiTokenBalance, fijiTokenBalance, stakingBalance]}
+                  stakeTokens={stakeTokens}
+                />
+                :<div>Loading...</div>
+                }
 
-                </Main>
 
               </div>
             </main>
