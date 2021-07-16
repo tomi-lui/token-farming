@@ -74,6 +74,10 @@ function App() {
       
     }
 
+    async function unstakeTokens() {
+      
+    }
+
     async function loadBlockChainData() {
         /*
         this function creates javascript contracts for 
